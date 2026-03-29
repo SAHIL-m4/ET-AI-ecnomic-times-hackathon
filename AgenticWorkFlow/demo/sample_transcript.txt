@@ -1,0 +1,63 @@
+MeetMind Demo Transcript — Q3 Product Review Meeting
+Date: 28 March 2026 | Duration: 47 minutes | Attendees: Priya (PM), Arjun (Engineering Lead), Sam (QA), Meera (Design)
+
+---
+
+Priya: Okay let's get started. We have a lot to cover today. First up — the v2.1 release status. Arjun, where are we?
+
+Arjun: So the core features are done. The API refactor is merged, auth is solid. The one blocker is the staging deploy — we hit a config issue yesterday. I can handle the staging deploy, I'll get it done by today end of day.
+
+Priya: Great. Sam, what's the QA situation?
+
+Sam: We have about 40 test cases passing. There are 3 edge cases failing around the file upload flow. I need to review the API contracts with Arjun before I can close those out. I'll set that up for tomorrow — Thursday.
+
+Priya: Good. Arjun, can you make time for that?
+
+Arjun: Yeah, Thursday works for me. I'll block time after standup.
+
+Priya: Okay next item — the Q3 roadmap. We need slides for the leadership review on Friday. Someone needs to own that.
+
+Arjun: I can take a first pass at the slides. I'll have a draft ready by Thursday evening so Priya can review before Friday.
+
+Priya: Perfect. Meera, what about the design side? The new onboarding flow?
+
+Meera: The onboarding designs are 80% done. I just need sign-off on the colour palette before I can finalise. Priya, can you approve that today?
+
+Priya: Yes, I'll look at it right after this call.
+
+Meera: Great. Once I have that I can wrap up the designs by end of week.
+
+Priya: Good. Now — documentation. The API docs are out of date since the refactor. We really need someone to update the docs.
+
+Arjun: Yeah they're pretty stale.
+
+Sam: Someone should really get to that.
+
+Priya: Agreed. The team needs to make sure that gets done before the release.
+
+Arjun: Yeah definitely.
+
+Priya: Okay. Next — we had three support tickets this week about the export feature being slow. Sam, can you investigate?
+
+Sam: Sure, I'll dig into the export performance issue. I'll aim to have a root cause by end of next week.
+
+Priya: That works. Meera, the marketing team also asked about updated UI screenshots for the website. Can design handle that?
+
+Meera: Yes, I can get the updated screenshots done. I'll do it after I wrap the onboarding designs — so early next week, Monday or Tuesday.
+
+Priya: Great. One more thing — we need to set up a shared Slack channel for the v2.1 launch coordination. Can someone do that quickly?
+
+Meera: I'll create the Slack channel. I can do it right after this call, takes five minutes.
+
+Priya: Perfect. Alright, I think that covers everything. Let me summarise what we have...
+
+Arjun: Actually, one more thing — the API rate limit config. We changed it in the refactor but I'm not sure we documented the new limits anywhere. That could cause issues for enterprise customers.
+
+Priya: Good catch. Arjun, can you document the new rate limits?
+
+Arjun: Yes, I'll add that to the API docs update. Actually that's probably part of the same docs task. So whoever owns the docs task should cover that too.
+
+Priya: Okay. Let's make sure that's captured. Alright — thanks everyone, good meeting.
+
+---
+[END OF TRANSCRIPT]
