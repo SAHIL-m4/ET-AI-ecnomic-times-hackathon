@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MeetMind — Autonomous Meeting Intelligence</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#F0F4FA;color:#1B3A6B;min-height:100vh}
+:root{--navy:#1B3A6B;--blue:#2E5FA3;--teal:#0F6E56;--amber:#BA7517;--ltgray:#E8EDF4;--white:#FFFFFF;--gray:#64748B}
+.header{background:var(--navy);padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+.logo-bar{width:5px;height:32px;background:var(--teal);border-radius:2px;margin-right:10px}
+.logo{display:flex;align-items:center}
+.logo-text{font-size:22px;font-weight:700;color:#fff}
+.logo-sub{font-size:11px;color:#94B4DE;margin-top:1px}
+.hbadge{font-size:11px;background:rgba(255,255,255,.1);color:#CADCFC;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15)}
+.main{max-width:1200px;margin:0 auto;padding:20px}
+.card{background:#fff;border:1px solid var(--ltgray);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.card-hdr{padding:11px 16px;border-bottom:1px solid var(--ltgray);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:13px;font-weight:600;color:var(--navy)}
+.card-body{padding:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+textarea{width:100%;height:150px;resize:none;border:1px solid var(--ltgray);outline:none;font-size:13px;color:var(--navy);font-family:inherit;background:#F8FAFF;border-radius:8px;padding:10px}
+textarea:focus{border-color:var(--blue)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:#152e56}.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:#0a4f3c}
+.btn-outline{background:transparent;color:var(--blue);border:1px solid var(--blue)}.btn-outline:hover{background:#EEF4FF}
+.btn-sm{padding:5px 12px;font-size:12px}
+.row{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.gate-banner{border-radius:10px;padding:12px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.g1{background:#EEF4FF;border:1px solid #B5D4F4}.g2{background:#E6F9F2;border:1px solid #9FE1CB}
+.gate-title{font-size:13px;font-weight:600;color:var(--navy)}.gate-sub{font-size:11px;color:var(--gray);margin-top:2px}
+.audit-list{max-height:460px;overflow-y:auto}
+.ai{border-bottom:1px solid #F1F4F8;cursor:pointer;transition:background .12s}
+.ai:hover,.ai.open{background:#F8FAFF}
+.ai:last-child{border-bottom:none}
+.ai-row{display:flex;align-items:flex-start;gap:8px;padding:10px 14px}
+.pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.pp{background:#EEEDFE;color:#3C3489}.pt{background:#E1F5EE;color:#085041}.pb{background:#E6F1FB;color:#0C447C}
+.pa{background:#FAEEDA;color:#633806}.pg{background:#F1EFE8;color:#444441}
+.ai-text{font-size:12px;color:#1B3A6B;line-height:1.5;flex:1}
+.ai-time{font-size:10px;color:#94A3B8;flex-shrink:0}
+.ai-action{font-size:10px;font-weight:600;margin-top:2px}
+.ac-s{color:#BA7517}.ac-g{color:#2E5FA3}.ac-p{color:#0F6E56}
+.ai-reason{margin:0 14px 10px;padding:10px 12px;background:#F8FAFF;border-radius:6px;border-left:2px solid #CBD5E1;font-size:11px;color:#475569;line-height:1.6;display:none}
+.ai.open .ai-reason{display:block}
+.flags{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+.fl{font-size:10px;background:#FFF7ED;color:#92400E;border:1px solid #FDE68A;border-radius:4px;padding:1px 6px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.metric{background:#fff;border:1px solid var(--ltgray);border-radius:10px;padding:12px;text-align:center}
+.mv{font-size:26px;font-weight:700;color:var(--navy)}.mw{color:var(--amber)}.ml{font-size:11px;color:var(--gray);margin-top:2px}
+.kb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
+.kb-col-t{font-size:11px;font-weight:600;color:var(--gray);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.kc{background:#F8FAFF;border:1px solid var(--ltgray);border-radius:8px;padding:9px 11px;margin-bottom:6px;font-size:12px}
+.kc.risk{border-left:3px solid var(--amber)}.kc.done{opacity:.55}
+.kct{font-weight:600;color:var(--navy);margin-bottom:4px;line-height:1.3}
+.kcm{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.ko{color:#64748B;font-size:11px}.kd{color:#94A3B8;font-size:11px}
+.kp{font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px}
+.ph{background:#FEE2E2;color:#991B1B}.pm{background:#FEF9C3;color:#854D0E}.pl{background:#F1F5F9;color:#475569}
+.prog-bar{height:4px;background:var(--ltgray);border-radius:2px;overflow:hidden;margin-bottom:4px}
+.prog-fill{height:100%;background:var(--teal);border-radius:2px;transition:width .4s}
+.stage-lbl{font-size:11px;color:var(--gray)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#22C55E;display:inline-block;animation:pulse 1.5s infinite;margin-right:5px}
+.sc-banner{background:#FFF7ED;border:1px solid #FDE68A;border-radius:8px;padding:9px 14px;margin:6px 14px;font-size:12px;color:#92400E;display:none}
+.sc-on{display:block!important}
+.idle-hint{text-align:center;padding:36px 20px}
+.idle-icon{width:44px;height:44px;background:#EEF4FF;border-radius:10px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
+.idle-t{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:5px}
+.idle-s{font-size:12px;color:var(--gray)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.fi{animation:fadeIn .3s ease}
+@keyframes slideIn{from{transform:translateY(-5px);opacity:0}to{transform:none;opacity:1}}
+.si{animation:slideIn .3s ease}
+.note{font-size:11px;color:var(--gray)}
+@media(max-width:768px){.grid2{grid-template-columns:1fr}.kb-grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <div class="logo-bar"></div>
+    <div>
+      <div class="logo-text">MeetMind</div>
+      <div class="logo-sub">Autonomous Meeting Intelligence Agent</div>
+    </div>
+  </div>
+  <div class="hbadge">ET AI Hackathon 2026 · PS2</div>
+</div>
+<div class="main">
+  <div id="g1" class="gate-banner g1 si" style="display:none">
+    <div><div class="gate-title">Gate 1 — Review parsed context</div><div class="gate-sub">Agent 1 has diarised speakers and segmented topics. Approve to begin decision extraction.</div></div>
+    <button class="btn btn-primary btn-sm" onclick="approve(1)">Approve &amp; Continue</button>
+  </div>
+  <div id="g2" class="gate-banner g2 si" style="display:none">
+    <div><div class="gate-title">Gate 2 — Review tasks before publishing</div><div class="gate-sub">Agent 3 created all tasks. Approve to push to the task board.</div></div>
+    <button class="btn btn-teal btn-sm" onclick="approve(2)">Approve &amp; Publish</button>
+  </div>
+  <div class="card">
+    <div class="card-hdr"><span class="card-title">Meeting transcript</span><span class="note">Paste text or load the demo</span></div>
+    <div class="card-body">
+      <textarea id="tin" placeholder="Paste your meeting transcript here...&#10;&#10;e.g.:&#10;Priya: Let's get started. Arjun, where are we on v2.1?&#10;Arjun: Almost done. I'll finish the staging deploy by end of day.&#10;Sam: I need to review API contracts with Arjun on Thursday..."></textarea>
+      <div class="row">
+        <button class="btn btn-primary" id="run-btn" onclick="go()" disabled>Run MeetMind</button>
+        <button class="btn btn-outline" onclick="loadDemo()">Load demo transcript</button>
+        <button class="btn btn-outline" onclick="reset()" style="margin-left:auto">Reset</button>
+        <span class="note" id="slabel"></span>
+      </div>
+    </div>
+  </div>
+  <div id="parea" style="display:none;margin-bottom:12px">
+    <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+    <div class="stage-lbl" id="plabel">Starting...</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-hdr">
+        <span class="card-title"><span id="ldot" class="live-dot" style="display:none"></span>Audit trail</span>
+        <span class="note">click any step for reasoning</span>
+      </div>
+      <div id="scb" class="sc-banner">Self-correction triggered — Agent 2 re-running with Watchdog feedback injected...</div>
+      <div class="audit-list" id="alist">
+        <div class="idle-hint">
+          <div class="idle-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E5FA3" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <div class="idle-t">No pipeline running</div>
+          <div class="idle-s">Load the demo transcript and click Run MeetMind.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="metrics" id="mets" style="display:none">
+        <div class="metric"><div class="mv" id="md">0</div><div class="ml">Decisions found</div></div>
+        <div class="metric"><div class="mv" id="mt">0</div><div class="ml">Tasks created</div></div>
+        <div class="metric"><div class="mv mw" id="mr">0</div><div class="ml">At-risk tasks</div></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">Task board</span><span class="note" id="bstat">Waiting for pipeline...</span></div>
+        <div class="kb-grid">
+          <div><div class="kb-col-t"><span class="dot" style="background:#94A3B8"></span>To do</div><div id="ctodo"></div></div>
+          <div><div class="kb-col-t"><span class="dot" style="background:#378ADD"></span>In progress</div><div id="cinp"></div></div>
+          <div><div class="kb-col-t"><span class="dot" style="background:#22C55E"></span>Done</div><div id="cdone"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const DEMO=`Q3 Product Review — 28 March 2026
+Attendees: Priya (PM), Arjun (Eng Lead), Sam (QA), Meera (Design)
+
+Priya: Let's get started. First — v2.1 release status. Arjun, where are we?
+Arjun: Core features done. API refactor merged, auth solid. The staging deploy is the only blocker. I can handle the staging deploy — I'll get it done by today end of day.
+Priya: Great. Sam, QA status?
+Sam: 40 test cases passing. Three edge cases failing on file upload. I need to review API contracts with Arjun. I'll set that up for tomorrow — Thursday.
+Priya: Good. Arjun, Thursday works?
+Arjun: Yeah, Thursday after standup.
+Priya: Next — Q3 roadmap slides for leadership review on Friday. Someone needs to own that.
+Arjun: I can take a first pass. I'll have a draft by Thursday evening so you can review before Friday.
+Priya: Perfect. Meera — onboarding flow?
+Meera: Designs are 80% done. I need colour palette sign-off. Priya, can you approve it today?
+Priya: Yes, right after this call.
+Meera: Great. Once I have that I'll wrap up the designs by end of week.
+Priya: Good. Now — API docs are out of date since the refactor. Someone needs to update the docs before the release.
+Arjun: Yeah they're pretty stale.
+Sam: Someone should really get to that.
+Priya: The team needs to make sure that happens.
+Arjun: Definitely.
+Priya: Sam — three support tickets about the export feature being slow. Can you investigate?
+Sam: Sure. I'll dig into the export performance issue and have a root cause by end of next week.
+Priya: Meera, can design get updated UI screenshots for the marketing site?
+Meera: Yes. I'll do that after I wrap the onboarding designs — early next week, Monday or Tuesday.
+Priya: And someone needs to set up a Slack channel for v2.1 launch coordination.
+Meera: I'll create the Slack channel right after this call. Five minutes.
+Priya: Perfect. Arjun — rate limit config changed in the refactor. Is that documented?
+Arjun: No. I'll add rate limit docs to the API update. Whoever owns the docs task should cover that too.
+Priya: Alright. Thanks everyone.`;
+
+const STEPS=[
+  {pill:"pp",label:"Agent 1",delay:1000,text:"Identified 4 speakers. Segmented into 5 topic blocks.",reasoning:"Speaker diarisation by name-prefix: Priya (14 turns), Arjun (10), Sam (5), Meera (6). Segmented: v2.1 status, Q3 roadmap, onboarding design, API docs, support & coordination. Confidence: 0.93.",flags:[],action:"await_gate",ac:"ac-g",alabel:"awaiting gate 1",pct:15,slabel:"Agent 1 complete — Gate 1 waiting",gate:1},
+  {pill:"pt",label:"Agent 2",delay:1200,text:"Extracted 9 decisions. Found 1 ambiguous owner — d6 confidence 0.31.",reasoning:"Commitment signals: modal verbs, explicit agreements, deadline phrases. d6 (update API docs): 'the team' and 'someone' — no named assignee. Overall confidence: 0.78.",flags:["ambiguous_owner:d6"],action:"watchdog_check",ac:"ac-s",alabel:"→ watchdog",pct:42,slabel:"Agent 2 complete — Watchdog reviewing",dec:9},
+  {pill:"pa",label:"Agent 4",delay:900,text:"Watchdog flagged d6: ambiguous owner + SLA breach risk. Triggering self-correction.",reasoning:"1 high-severity issue: d6 has no owner, deadline 'before release'. SLA breach probability 0.71. Injecting feedback into Agent 2: cross-reference Arjun's phrase 'whoever owns the docs task'.",flags:["ambiguous_owner:d6","sla_risk:d6"],action:"self_correct",ac:"ac-s",alabel:"self-correcting",pct:56,slabel:"Self-correction firing — Agent 2 re-running",sc:1},
+  {pill:"pt",label:"Agent 2",delay:1300,text:"Self-correction pass 2: 8/9 resolved. d6 owner unresolvable — escalated to Gate 2.",reasoning:"Re-examined d6. Arjun says 'whoever owns the docs task' — explicit deflection, not acceptance. No other speaker accepted ownership. d6 escalated to Gate 2 for human assignment.",flags:["unresolved_owner:d6"],action:"proceed",ac:"ac-p",alabel:"proceed",pct:68,slabel:"Self-correction complete — Agent 3 creating tasks",hsc:1},
+  {pill:"pb",label:"Agent 3",delay:1100,text:"Created 9 tasks. 1 flagged at-risk (no owner). 1 already done.",reasoning:"Priority by deadline + stakeholder signal. t1–t4 high priority (same-day or 2-day deadlines). t6 at_risk — no owner, release-blocking. t9 marked done (Meera completing immediately). Gate 2 surfacing t6.",flags:["at_risk:t6"],action:"await_gate",ac:"ac-g",alabel:"awaiting gate 2",pct:86,slabel:"Agent 3 complete — Gate 2 waiting",gate:2,tasks:1}
+];
+
+const TASKS=[
+  {t:"Deploy v2.1 to staging",o:"Arjun",d:"Today",p:"high",s:"todo",r:false},
+  {t:"Review API contracts with Sam",o:"Sam",d:"Thursday",p:"high",s:"todo",r:false},
+  {t:"Draft Q3 roadmap slides",o:"Arjun",d:"Thu evening",p:"high",s:"todo",r:false},
+  {t:"Approve onboarding colour palette",o:"Priya",d:"Today",p:"high",s:"todo",r:false},
+  {t:"Finalise onboarding designs",o:"Meera",d:"Friday",p:"medium",s:"todo",r:false},
+  {t:"Update API docs + rate limits",o:null,d:"Before release",p:"high",s:"todo",r:true},
+  {t:"Investigate export performance",o:"Sam",d:"4 Apr",p:"medium",s:"inprogress",r:false},
+  {t:"UI screenshots for marketing",o:"Meera",d:"Mon–Tue",p:"medium",s:"todo",r:false},
+  {t:"Create v2.1 Slack channel",o:"Meera",d:"Today",p:"low",s:"done",r:false},
+];
+
+let running=false,step=0;
+const $=id=>document.getElementById(id);
+const ts=()=>new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+$("tin").addEventListener("input",function(){$("run-btn").disabled=!this.value.trim()});
+
+function loadDemo(){$("tin").value=DEMO;$("run-btn").disabled=false;$("slabel").textContent="Demo loaded"}
+
+function reset(){
+  running=false;step=0;
+  $("alist").innerHTML='<div class="idle-hint"><div class="idle-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E5FA3" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="idle-t">No pipeline running</div><div class="idle-s">Load the demo transcript and click Run MeetMind.</div></div>';
+  ["ctodo","cinp","cdone"].forEach(id=>$(id).innerHTML="");
+  $("g1").style.display=$("g2").style.display="none";
+  $("scb").className="sc-banner";$("mets").style.display="none";
+  $("parea").style.display="none";$("ldot").style.display="none";
+  $("bstat").textContent="Waiting for pipeline...";$("slabel").textContent="";
+  $("pfill").style.width="0%";$("run-btn").disabled=!$("tin").value.trim();
+}
+
+function addEntry(s){
+  const idle=$("alist").querySelector(".idle-hint");if(idle)idle.remove();
+  const el=document.createElement("div");el.className="ai fi";
+  const fh=s.flags.length?`<div class="flags">${s.flags.map(f=>`<span class="fl">${f}</span>`).join("")}</div>`:"";
+  el.innerHTML=`<div class="ai-row"><span class="pill ${s.pill}">${s.label}</span><div style="flex:1"><div class="ai-text">${s.text}</div>${fh}<div class="ai-action ${s.ac}">${s.alabel}</div></div><span class="ai-time">${ts()}</span></div><div class="ai-reason">${s.reasoning}</div>`;
+  el.addEventListener("click",()=>el.classList.toggle("open"));
+  $("alist").appendChild(el);$("alist").scrollTop=$("alist").scrollHeight;
+}
+
+function addSys(text,reason){
+  const el=document.createElement("div");el.className="ai fi";
+  el.innerHTML=`<div class="ai-row"><span class="pill pg">System</span><div class="ai-text" style="flex:1">${text}</div><span class="ai-time">${ts()}</span></div><div class="ai-reason">${reason}</div>`;
+  el.addEventListener("click",()=>el.classList.toggle("open"));
+  $("alist").appendChild(el);$("alist").scrollTop=$("alist").scrollHeight;
+}
+
+function renderTasks(){
+  $("mets").style.display="grid";
+  $("md").textContent="9";$("mt").textContent="9";$("mr").textContent="1";
+  $("bstat").textContent="Tasks published";
+  ["todo","inprogress","done"].forEach(status=>{
+    const col=$(status==="todo"?"ctodo":status==="inprogress"?"cinp":"cdone");
+    col.innerHTML="";
+    TASKS.filter(t=>t.s===status).forEach(t=>{
+      const d=document.createElement("div");
+      d.className="kc"+(t.r?" risk":"")+(t.s==="done"?" done":"");
+      d.innerHTML=`<div class="kct">${t.t}</div><div class="kcm">${t.o?`<span class="ko">${t.o}</span>`:`<span style="color:var(--amber);font-size:11px;font-weight:600">No owner</span>`}${t.d?`<span class="kd">· ${t.d}</span>`:""}<span class="kp p${t.p[0]}">${t.p}</span>${t.r?`<span style="font-size:10px;color:var(--amber);font-weight:600">⚠ at risk</span>`:""}</div>`;
+      col.appendChild(d);
+    });
+  });
+}
+
+async function go(){
+  if(running)return;
+  if(!$("tin").value.trim())return;
+  running=true;step=0;
+  $("parea").style.display="block";$("ldot").style.display="inline-block";
+  $("run-btn").disabled=true;$("alist").innerHTML="";
+  ["ctodo","cinp","cdone"].forEach(id=>$(id).innerHTML="");
+  $("g1").style.display=$("g2").style.display="none";
+  next();
+}
+
+async function next(){
+  if(step>=STEPS.length){finish();return;}
+  const s=STEPS[step];
+  await sleep(s.delay);
+  $("pfill").style.width=s.pct+"%";$("plabel").textContent=s.slabel;
+  if(s.sc)$("scb").className="sc-banner sc-on";
+  if(s.hsc)$("scb").className="sc-banner";
+  addEntry(s);
+  if(s.dec)$("md").textContent=s.dec;
+  if(s.tasks)renderTasks();
+  if(s.gate){$(("g"+s.gate)).style.display="flex";}
+  else{step++;next();}
+}
+
+function approve(n){
+  $("g"+n).style.display="none";
+  addSys("Gate "+n+" approved. Pipeline resuming.","Human reviewed and confirmed. Decision logged with timestamp. Pipeline continuing.");
+  step++;next();
+}
+
+function finish(){
+  running=false;$("ldot").style.display="none";$("pfill").style.width="100%";
+  $("plabel").textContent="Pipeline complete — audit trail and task board ready";
+  $("run-btn").disabled=false;$("slabel").textContent="Done";
+  addSys("Pipeline complete. 9 tasks created. Full audit trail logged.","All agents finished. Self-correction ran once. 2 human gates approved. Audit trail written.");
+}
+</script>
+</body>
+</html>
