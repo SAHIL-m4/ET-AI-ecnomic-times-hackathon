@@ -2,7 +2,9 @@
 
 Autonomous Meeting Intelligence Agent
 
+
 > ET AI Hackathon 2026 · Problem Statement 2: Agentic AI for Autonomous Enterprise Workflows
+
 
 It deploys a four-agent AI pipeline that takes a meeting transcript and autonomously extracts every decision, creates structured tasks, assigns owners, detects SLA risks — and produces a full auditable trail of every reasoning step. Humans stay in control at two approval gates; everything else runs itself.
 
